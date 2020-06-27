@@ -1,0 +1,38 @@
+ body{
+     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+} 
+#viewDiv
+ {
+  margin: 5vh;
+  padding: 0;
+  height: 60vh;
+  color: #323232;
+}
+
+#result{
+  background-image: linear-gradient(to bottom right,  rgb(193, 243, 243) 30%, white 100% );
+  margin: 5vh;
+  padding: 5vh;
+  height: 60vh;
+}
+
+#heading{
+    margin: 5vh;
+    padding: 5vh;
+    font-size: xx-large;
+    font-weight: 300;
+    background-color: rgba(0, 255, 255, 0.5);
+}
+
+#viewDiv canvas {
+  filter: saturate(1.4) drop-shadow(0 0 100px white);
+}
+
+#search, #b{
+  height: 5vh;
+  border-radius: 5px;
+}
+
+#search{
+  padding: 1vh;
+}

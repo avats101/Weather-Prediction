@@ -1,0 +1,105 @@
+<html>
+    <head>   
+        <title>
+            WEATHER PREDICTION SITE
+        </title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1">
+
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+
+        <link rel="stylesheet" href="https://js.arcgis.com/4.12/esri/themes/light/main.css">
+        <script src="https://js.arcgis.com/4.12/"></script>
+        <link rel="stylesheet" href="weather.css">
+
+
+        <script>
+          require([
+            "esri/Map",
+            "esri/views/SceneView",
+            "esri/layers/TileLayer",
+            "esri/Basemap",
+            "esri/geometry/Mesh"
+          ], function (Map, SceneView, TileLayer, Basemap, Mesh) {
+
+            const R=6358137;
+            const offset=400000;
+      
+            const basemap = new Basemap({
+              baseLayers: [
+                new TileLayer({
+                  url: "https://tiles.arcgis.com/tiles/nGt4QxSblgDfeJn9/arcgis/rest/services/terrain_with_heavy_bathymetry/MapServer"
+                })
+              ]
+            });
+      
+            const map = new Map({
+              basemap: basemap
+            });
+      
+            const view = new SceneView({
+              container: "viewDiv",
+              map: map,
+              constraints: {
+                altitude: {
+                  min: 3000000,
+                  max: 18000000
+                }
+              }
+            });
+
+            const cloudsSphere=Mesh.createSphere(new Point({
+              x:0,y:-90,z:-(2*R+offset)
+            }), {
+              size: 2*(R+offset),
+              material:{
+                colorTexture: 'clouds.png',
+                doubleSided:false
+              },
+              densificationFactor:6
+            });
+
+            cloudsSphere.components[0].shading="flat";
+            const clouds = new Graphic({
+              geometry: cloudsSphere,
+              symbol: {
+                type: "mesh-3d",
+                symbolLayers: [{ type: "fill" }]
+              }
+            });
+
+            view.graphics.add(clouds); 
+          });
+        </script>
+    </head>
+
+    <body style="background-color: black;">
+        <center>
+          <div id="heading">WEATHER PREDICTION</div>
+          <div class="search-container">
+            <input type="text" placeholder="search for a location" id="search">
+            <button id="b">
+              <i class="fas fa-search"></i>
+            </button>
+          </div>
+          <div class="row">
+            <div class="col-sm-6">
+              <div id="viewDiv"></div>
+            </div>
+            <div class="col-sm-6">
+              <div id="result">
+                WEATHER STATS
+                <hr>
+                SUNNY<br>RAINY
+              </div>
+            </div>
+          </div>
+        </center>
+    </body>
+    
+</html>
