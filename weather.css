@@ -1,11 +1,14 @@
  body{
      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+     background-color: black;
+     background-image: url(stars.jpg);
 } 
 #viewDiv
  {
   margin: 5vh;
   padding: 0;
-  height: 60vh;
+  width: 100vh;
+  height: 80vh;
   color: #323232;
 }
 
@@ -15,7 +18,9 @@
   padding: 5vh;
   height: 60vh;
 }
-
+#col{
+  padding:0;
+}
 #heading{
     margin: 5vh;
     padding: 5vh;
@@ -28,11 +33,13 @@
   filter: saturate(1.4) drop-shadow(0 0 100px white);
 }
 
-#search, #b{
+#search, #btn{
   height: 5vh;
+  
   border-radius: 5px;
 }
 
 #search{
   padding: 1vh;
+  width: 20vh;
 }
