@@ -21,23 +21,30 @@ from collections import namedtuple
 df1 = []
 features = ['temperatureMin','temperatureMax','sunriseTime','sunsetTime']
 DailySummary = namedtuple("DailySummary", features)
+apikey="24f425975f71f30890d8d790e82cc8bc"
+x_cord="28.7041"
+y_cord="77.1025" 
 for time in epoch_time_list:
     if time<1293840000 or time>=1325376000:
-        BASE_URL = "https://api.darksky.net/forecast/24f425975f71f30890d8d790e82cc8bc/26.8371648,75.5625925," + str(time) + "?exclude=currently,flags,alerts,hourly"#here latitude,longitude variable is yet to be used
+        BASE_URL = "https://api.darksky.net/forecast/"+apikey+"/"+x_cord+","+y_cord+"," + str(time)+"?exclude=currently,flags,alerts,hourly"#here latitude,longitude variable is yet to be used
         response = requests.get(BASE_URL)
         data = response.json()
-        df = pd.DataFrame(data["daily"]["data"])
-        df1.append(DailySummary(sunriseTime = df.at[0, 'sunriseTime'],sunsetTime = df.at[0, 'sunsetTime'],temperatureMin = df.at[0, 'temperatureLow'],temperatureMax = df.at[0, 'temperatureHigh']))                    
+        if "daily" in data:
+            df = pd.DataFrame(data["daily"]["data"])
+            df1.append(DailySummary(sunriseTime = df.at[0, 'sunriseTime'],sunsetTime = df.at[0, 'sunsetTime'],temperatureMin = df.at[0, 'temperatureLow'],temperatureMax = df.at[0, 'temperatureHigh']))                  
 res = pd.DataFrame(df1, columns=features)
 tempMin=res['temperatureMin']
 tempMax=res['temperatureMax']
 import pandas as pd
 from pandas import Series
-from statsmodels.tsa.arima_model import ARIMA
+from statsmodels.tsa.arima.model import ARIMA
 model = ARIMA(tempMin, order=(1,0,0))
-model_fit = model.fit(disp=0)
-forecast_min = model_fit.forecast(steps=1)[0]
+model_fit = model.fit()
+forecast_min = model_fit.forecast()
+print(forecast_min)
 model = ARIMA(tempMax, order=(1,0,0))
-model_fit = model.fit(disp=0)
-forecast_max = model_fit.forecast(steps=1)[0]
+model_fit = model.fit()
+forecast_max = model_fit.forecast()
+print(forecast_max)
 # clear all the logs is still left
+# Change the order by seeing this https://people.duke.edu/~rnau/411arim3.htm
